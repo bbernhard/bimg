@@ -4,9 +4,9 @@
 # NOTE: deprecated! Try libvips installation: https://libvips.github.io/libvips/install.html
 #
 
-vips_version_minimum=8.9.2
-vips_version_latest_major_minor=8.9
-vips_version_latest_patch=2
+vips_version_minimum=8.13.3
+vips_version_latest_major_minor=8.13
+vips_version_latest_patch=3
 vips_version_full="$vips_version_latest_major_minor.$vips_version_latest_patch"
 
 openslide_version_minimum=3.4.0
@@ -28,7 +28,7 @@ install_libvips_from_source() {
   make install
   cd ..
   rm -rf vips-$vips_version_latest_major_minor.$vips_version_latest_patch
-  rm vips-$vips_version_latest_major_minor.$vips_version_latest_patch.tar.gz
+  rm vips-$vips_version_latest_major_minor.$vips_version_latest_patch.tar.xz
   ldconfig
   echo "Installed libvips $(PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig pkg-config --modversion vips)"
 }
@@ -129,12 +129,12 @@ if [ $enable_openslide -eq 1 ] && [ -z $vips_with_openslide ] && [ $openslide_ex
     DISTRO=$(lsb_release -c -s)
     echo "Detected Debian Linux '$DISTRO'"
     case "$DISTRO" in
-      jessie|vivid|wily|xenial|stretch|loki|bullseye)
+      jessie|vivid|wily|xenial|stretch|loki|bullseye|bookworm)
         # Debian 9, Debian 8, Ubuntu 15
         echo "Installing libopenslide via apt-get"
         apt-get install -y libopenslide-dev
         ;;
-      trusty|utopic|qiana|rebecca|rafaela|freya|rosa|sarah|serena)
+      trusty|utopic|qiana|rebecca|rafaela|freya|rosa|sarah|serena|focal)
         # Ubuntu 14, Mint 17+
         echo "Installing libopenslide dependencies via apt-get"
         apt-get install -y automake build-essential curl zlib1g-dev libopenjpeg-dev libpng12-dev libjpeg-dev libtiff5-dev libgdk-pixbuf2.0-dev libxml2-dev libsqlite3-dev libcairo2-dev libglib2.0-dev sqlite3 libsqlite3-dev
@@ -213,13 +213,13 @@ if [ -f /etc/debian_version ]; then
   DISTRO=$(lsb_release -c -s)
   echo "Detected Debian Linux '$DISTRO'"
   case "$DISTRO" in
-    jessie|trusty|utopic|vivid|wily|xenial|qiana|rebecca|rafaela|freya|rosa|sarah|serena|loki)
+    jessie|trusty|utopic|vivid|wily|xenial|qiana|rebecca|rafaela|freya|rosa|sarah|serena|loki|focal)
       # Debian 8, Ubuntu 14.04+, Mint 17+
       echo "Installing libvips dependencies via apt-get"
       apt-get install -y automake build-essential gobject-introspection gtk-doc-tools libglib2.0-dev libjpeg-dev libpng12-dev libwebp-dev libtiff5-dev libexif-dev libgsf-1-dev liblcms2-dev libxml2-dev swig libmagickcore-dev curl
       install_libvips_from_source
       ;;
-    stretch|bullseye)
+    stretch|bullseye|bookworm)
       # Debian 9
       echo "Installing libvips dependencies via apt-get"
       apt-get install -y automake build-essential gobject-introspection gtk-doc-tools libglib2.0-dev libjpeg-dev libpng-dev libwebp-dev libtiff5-dev libexif-dev libgsf-1-dev liblcms2-dev libxml2-dev swig libmagickcore-dev curl
